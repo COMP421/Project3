@@ -86,18 +86,12 @@ public class Q2 extends Application
 		//Defining the Last Name text field
 		final TextField healthID = new TextField();
 		healthID.setPromptText("healthID.");
-		Label hinLabel = new Label("Please enter the donor's health insurance number: ");
-		GridPane.setConstraints(hinLabel, 0, 0);
-		donorRegisGrid.getChildren().add(hinLabel);
-		GridPane.setConstraints(healthID, 0, 1);
+		GridPane.setConstraints(healthID, 0, 0);
 		donorRegisGrid.getChildren().add(healthID);
 		
 		final TextField dname = new TextField();
-		Label nameLabel = new Label("Please enter the donor's full name: ");
-		GridPane.setConstraints(nameLabel, 0, 2);
-		donorRegisGrid.getChildren().add(nameLabel);
-		dname.setPromptText("full name");
-		GridPane.setConstraints(dname, 0, 3);
+		dname.setPromptText("Enter your full name.");
+		GridPane.setConstraints(dname, 0, 1);
 		donorRegisGrid.getChildren().add(dname);
 		
 		StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
@@ -124,64 +118,49 @@ public class Q2 extends Application
 		final DatePicker date = new DatePicker();
 		date.setConverter(converter);
 		date.setPromptText("Date");
-		Label dateLabel = new Label("Please enter the date: ");
-		GridPane.setConstraints(dateLabel, 0, 4);
-		donorRegisGrid.getChildren().add(dateLabel);
-		GridPane.setConstraints(date, 0, 5);
+		GridPane.setConstraints(date, 0, 2);
 		donorRegisGrid.getChildren().add(date);
 		
 		final TextField address = new TextField();
 		address.setPromptText("Address.");
-		Label addrLabel = new Label("Please enter the donor's address: ");
-		GridPane.setConstraints(addrLabel, 0, 6);
-		donorRegisGrid.getChildren().add(addrLabel);
-		GridPane.setConstraints(address, 0, 7);
+		GridPane.setConstraints(address, 0, 3);
 		donorRegisGrid.getChildren().add(address);
 		
 		final ObservableList<String> genderType = FXCollections.observableArrayList("Male", "Female", "Other");
 		final ComboBox gender = new ComboBox(genderType);
 		gender.setPromptText("Gender");
-		GridPane.setConstraints(gender, 0, 8);
+		GridPane.setConstraints(gender, 0, 4);
 		donorRegisGrid.getChildren().add(gender);
 		
 		final ObservableList<String> bloodtype = FXCollections.observableArrayList("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-");
 		final ComboBox btype = new ComboBox(bloodtype);
 		btype.setPromptText("Blood type");
-		GridPane.setConstraints(btype, 0, 9);
+		GridPane.setConstraints(btype, 0, 5);
 		donorRegisGrid.getChildren().add(btype);
 		
 		//Defining the Comment text field
 		final TextField phone = new TextField();
-		Label phoneLabel = new Label("Please enter the donor's phone number: ");
-		GridPane.setConstraints(phoneLabel, 0, 10);
-		donorRegisGrid.getChildren().add(phoneLabel);
 		phone.setPrefColumnCount(15);
 		phone.setPromptText("phone number");
-		GridPane.setConstraints(phone, 0, 11);
+		GridPane.setConstraints(phone, 0, 6);
 		donorRegisGrid.getChildren().add(phone);
 		
 		final TextField weight = new TextField();
-		Label wLabel = new Label("Please enter the donor's weight: ");
-		GridPane.setConstraints(wLabel, 0, 12);
-		donorRegisGrid.getChildren().add(wLabel);
 		weight.setPromptText("weight");
-		GridPane.setConstraints(weight, 0, 13);
+		GridPane.setConstraints(weight, 0, 7);
 		donorRegisGrid.getChildren().add(weight);
 		
 		final TextField height = new TextField();
-		Label hLabel = new Label("Please enter the donor's height: ");
-		GridPane.setConstraints(hLabel, 0, 14);
-		donorRegisGrid.getChildren().add(hLabel);
 		height.setPromptText("height");
-		GridPane.setConstraints(height, 0, 15);
+		GridPane.setConstraints(height, 0, 8);
 		donorRegisGrid.getChildren().add(height);
 		
 		//Defining the Submit button
 		Button submit = new Button("Submit");
-		GridPane.setConstraints(submit, 1, 16);
+		GridPane.setConstraints(submit, 1, 9);
 		donorRegisGrid.getChildren().add(submit);
 		
-		
+		Scene rootScene = new Scene(root);
 		
 		submit.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -227,7 +206,7 @@ public class Q2 extends Application
 					stmt.executeUpdate(aString);
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
-					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+					pPrimaryStage.setScene(errorSceneCreator(e.getMessage(), pPrimaryStage, rootScene));
 					pPrimaryStage.show();
 				}
 				
@@ -286,7 +265,7 @@ public class Q2 extends Application
 					pPrimaryStage.show();
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
-					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+					pPrimaryStage.setScene(errorSceneCreator(e.getMessage(),pPrimaryStage,rootScene));
 					pPrimaryStage.show();
 				}	
 			}
@@ -361,7 +340,7 @@ public class Q2 extends Application
 					pPrimaryStage.show();
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
-					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+					pPrimaryStage.setScene(errorSceneCreator(e.getMessage(),pPrimaryStage,rootScene));
 					pPrimaryStage.show();
 				}	
 			}
@@ -369,7 +348,7 @@ public class Q2 extends Application
 		//bloodMgt.add(submitInMGT, 1, 0);
 		
 		
-		Scene rootScene = new Scene(root);
+		
 		
 		Button rootButton = new Button("Back To Main");
 
@@ -457,11 +436,18 @@ public class Q2 extends Application
 		GridPane.setConstraints(deletedate, 0, 0);
 		
 		
-		Button deleteSubmit = new Button("submit");
+		Button deleteSubmit = new Button("Submit");
 		deleteSubmit.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
 			public void handle(ActionEvent event) {
+				if(deletedate.getValue() == null){
+					pPrimaryStage.hide();
+					pPrimaryStage.setScene(errorSceneCreator("Please input",pPrimaryStage,rootScene));
+					pPrimaryStage.show();
+					return;
+				}
+				
 				String aString  = " delete from blood where (bloodId,bankId) in (select bloodid, bankid from blood where expdate < '"+deletedate.getValue().toString() +"' except (select B1.bloodid, B1.bankid from bloodsupply B1,blood B2 where B1.bankid = B2.bankid and B1.bloodid = B2.bloodid));";
 				System.out.println(aString);
 				try {
@@ -480,12 +466,12 @@ public class Q2 extends Application
 					stmt.executeUpdate(aString);
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
-					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+					pPrimaryStage.setScene(errorSceneCreator(e.getMessage(),pPrimaryStage,rootScene));
 					pPrimaryStage.show();
 				}
 				
 				pPrimaryStage.hide();
-				pPrimaryStage.setScene(errorSceneCreator("Successfully deleted"));
+				pPrimaryStage.setScene(errorSceneCreator("Successfully deleted",pPrimaryStage,rootScene));
 				pPrimaryStage.show();
 			}
 			
@@ -592,11 +578,23 @@ public class Q2 extends Application
 		return scene;
 	}
 	
-	public static Scene errorSceneCreator(String message){
+	public static Scene errorSceneCreator(String message, Stage s, Scene scene){
         final Label label = new Label(message);
         label.setFont(new Font("Arial", 20));
- 
+        Button rootButton = new Button("Back To Main Page");
+
+		rootButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				s.hide();
+				s.setScene(scene);
+				s.show();
+				
+			}
+		});
+		
         GridPane grid = new GridPane();
+        grid.add(rootButton, 3, 4);
         grid.getChildren().add(label);
         
 		return new Scene(grid);

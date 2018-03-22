@@ -76,18 +76,18 @@ public class BloodDonationOption {
 					
 					if(exist == 1){
 						pPrimaryStage.hide();
-						pPrimaryStage.setScene(bloodDonationOptionScene(pPrimaryStage, HealthId));
+						pPrimaryStage.setScene(bloodDonationOptionScene(pPrimaryStage, HealthId, prevScene));
 						pPrimaryStage.show();
 					}
 					else{
 						pPrimaryStage.hide();
-						pPrimaryStage.setScene(Q2.errorSceneCreator("Not found"));
+						pPrimaryStage.setScene(Q2.errorSceneCreator("Not found", pPrimaryStage, prevScene));
 						pPrimaryStage.show();
 					}
 					
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
-					pPrimaryStage.setScene(Q2.errorSceneCreator(e.getMessage()));
+					pPrimaryStage.setScene(Q2.errorSceneCreator(e.getMessage(), pPrimaryStage, prevScene));
 					pPrimaryStage.show();
 				}	
 				
@@ -110,7 +110,7 @@ public class BloodDonationOption {
 		return new Scene(grid);
 	}
 	
-	public static Scene bloodDonationOptionScene(Stage pPrimaryStage, String HealthID){
+	public static Scene bloodDonationOptionScene(Stage pPrimaryStage, String HealthID, Scene prevScene){
 		GridPane grid = new GridPane();
 		
 		final TextField did = new TextField();
@@ -179,7 +179,7 @@ public class BloodDonationOption {
 				Connection con;
 				
 				pPrimaryStage.hide();
-				pPrimaryStage.setScene(Q2.errorSceneCreator("Complete"));
+				pPrimaryStage.setScene(Q2.errorSceneCreator("Complete", pPrimaryStage, prevScene));
 				pPrimaryStage.show();
 				try {
 					con = DriverManager.getConnection(url, userName, password);
@@ -187,7 +187,7 @@ public class BloodDonationOption {
 					stmt.executeUpdate(aString);
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
-					pPrimaryStage.setScene(Q2.errorSceneCreator(e.getMessage()));
+					pPrimaryStage.setScene(Q2.errorSceneCreator(e.getMessage(), pPrimaryStage, prevScene));
 					pPrimaryStage.show();
 				}
 			}
