@@ -86,12 +86,18 @@ public class Q2 extends Application
 		//Defining the Last Name text field
 		final TextField healthID = new TextField();
 		healthID.setPromptText("healthID.");
-		GridPane.setConstraints(healthID, 0, 0);
+		Label hinLabel = new Label("Please enter the donor's health insurance number: ");
+		GridPane.setConstraints(hinLabel, 0, 0);
+		donorRegisGrid.getChildren().add(hinLabel);
+		GridPane.setConstraints(healthID, 0, 1);
 		donorRegisGrid.getChildren().add(healthID);
 		
 		final TextField dname = new TextField();
-		dname.setPromptText("Enter your full name.");
-		GridPane.setConstraints(dname, 0, 1);
+		Label nameLabel = new Label("Please enter the donor's full name: ");
+		GridPane.setConstraints(nameLabel, 0, 2);
+		donorRegisGrid.getChildren().add(nameLabel);
+		dname.setPromptText("full name");
+		GridPane.setConstraints(dname, 0, 3);
 		donorRegisGrid.getChildren().add(dname);
 		
 		StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
@@ -118,46 +124,61 @@ public class Q2 extends Application
 		final DatePicker date = new DatePicker();
 		date.setConverter(converter);
 		date.setPromptText("Date");
-		GridPane.setConstraints(date, 0, 2);
+		Label dateLabel = new Label("Please enter the date: ");
+		GridPane.setConstraints(dateLabel, 0, 4);
+		donorRegisGrid.getChildren().add(dateLabel);
+		GridPane.setConstraints(date, 0, 5);
 		donorRegisGrid.getChildren().add(date);
 		
 		final TextField address = new TextField();
 		address.setPromptText("Address.");
-		GridPane.setConstraints(address, 0, 3);
+		Label addrLabel = new Label("Please enter the donor's address: ");
+		GridPane.setConstraints(addrLabel, 0, 6);
+		donorRegisGrid.getChildren().add(addrLabel);
+		GridPane.setConstraints(address, 0, 7);
 		donorRegisGrid.getChildren().add(address);
 		
 		final ObservableList<String> genderType = FXCollections.observableArrayList("Male", "Female", "Other");
 		final ComboBox gender = new ComboBox(genderType);
 		gender.setPromptText("Gender");
-		GridPane.setConstraints(gender, 0, 4);
+		GridPane.setConstraints(gender, 0, 8);
 		donorRegisGrid.getChildren().add(gender);
 		
 		final ObservableList<String> bloodtype = FXCollections.observableArrayList("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-");
 		final ComboBox btype = new ComboBox(bloodtype);
 		btype.setPromptText("Blood type");
-		GridPane.setConstraints(btype, 0, 5);
+		GridPane.setConstraints(btype, 0, 9);
 		donorRegisGrid.getChildren().add(btype);
 		
 		//Defining the Comment text field
 		final TextField phone = new TextField();
+		Label phoneLabel = new Label("Please enter the donor's phone number: ");
+		GridPane.setConstraints(phoneLabel, 0, 10);
+		donorRegisGrid.getChildren().add(phoneLabel);
 		phone.setPrefColumnCount(15);
 		phone.setPromptText("phone number");
-		GridPane.setConstraints(phone, 0, 6);
+		GridPane.setConstraints(phone, 0, 11);
 		donorRegisGrid.getChildren().add(phone);
 		
 		final TextField weight = new TextField();
+		Label wLabel = new Label("Please enter the donor's weight: ");
+		GridPane.setConstraints(wLabel, 0, 12);
+		donorRegisGrid.getChildren().add(wLabel);
 		weight.setPromptText("weight");
-		GridPane.setConstraints(weight, 0, 7);
+		GridPane.setConstraints(weight, 0, 13);
 		donorRegisGrid.getChildren().add(weight);
 		
 		final TextField height = new TextField();
+		Label hLabel = new Label("Please enter the donor's height: ");
+		GridPane.setConstraints(hLabel, 0, 14);
+		donorRegisGrid.getChildren().add(hLabel);
 		height.setPromptText("height");
-		GridPane.setConstraints(height, 0, 8);
+		GridPane.setConstraints(height, 0, 15);
 		donorRegisGrid.getChildren().add(height);
 		
 		//Defining the Submit button
 		Button submit = new Button("Submit");
-		GridPane.setConstraints(submit, 1, 9);
+		GridPane.setConstraints(submit, 1, 16);
 		donorRegisGrid.getChildren().add(submit);
 		
 		
