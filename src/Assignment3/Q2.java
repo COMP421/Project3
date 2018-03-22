@@ -44,7 +44,6 @@ public class Q2 extends Application
 	private static ObservableList<Combo2> Donationdata = FXCollections.observableArrayList();
 	private static TableView<Combo2> Donationtable = new TableView<Combo2>();
 	private final String pattern = "yyyy-MM-dd";
-
 	/**
 	 * 
 	 * @param pArgs 
@@ -215,6 +214,7 @@ public class Q2 extends Application
 			}
 			
 		});
+		Scene donorGridScene = new Scene(donorRegisGrid);
 		Button switchS = new Button("Donor Registration");
 		root.add(switchS,0,0);
 		
@@ -222,7 +222,7 @@ public class Q2 extends Application
 			@Override
 			public void handle(ActionEvent event) {
 				pPrimaryStage.hide();
-				pPrimaryStage.setScene(new Scene(donorRegisGrid));
+				pPrimaryStage.setScene(donorGridScene);
 				pPrimaryStage.show();
 				
 			}
@@ -309,12 +309,13 @@ public class Q2 extends Application
 		
 		Button record = new Button("Donation record");
 		root.add(record,0,2);
+		Scene recordScene = new Scene(recordGrid);
 		record.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
 			public void handle(ActionEvent event) {
 				pPrimaryStage.hide();
-				pPrimaryStage.setScene(new Scene(recordGrid));
+				pPrimaryStage.setScene(recordScene);
 				pPrimaryStage.show();
 			}
 			
@@ -381,12 +382,12 @@ public class Q2 extends Application
 			}
 		});
 		//bloodMgt.add(submitInMGT, 1, 0);
-		
+		Scene bloodScene = new Scene(bloodMgt);
 		bloodManagement.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
 				pPrimaryStage.hide();
-				pPrimaryStage.setScene(new Scene(bloodMgt));
+				pPrimaryStage.setScene(bloodScene);
 				pPrimaryStage.show();
 			}
 		});
