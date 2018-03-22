@@ -86,12 +86,18 @@ public class Q2 extends Application
 		//Defining the Last Name text field
 		final TextField healthID = new TextField();
 		healthID.setPromptText("healthID.");
-		GridPane.setConstraints(healthID, 0, 0);
+		Label hinLabel = new Label("Please enter the donor's health insurance number: ");
+		GridPane.setConstraints(hinLabel, 0, 0);
+		donorRegisGrid.getChildren().add(hinLabel);
+		GridPane.setConstraints(healthID, 0, 1);
 		donorRegisGrid.getChildren().add(healthID);
 		
 		final TextField dname = new TextField();
-		dname.setPromptText("Enter your full name.");
-		GridPane.setConstraints(dname, 0, 1);
+		Label nameLabel = new Label("Please enter the donor's full name: ");
+		GridPane.setConstraints(nameLabel, 0, 2);
+		donorRegisGrid.getChildren().add(nameLabel);
+		dname.setPromptText("full name");
+		GridPane.setConstraints(dname, 0, 3);
 		donorRegisGrid.getChildren().add(dname);
 		
 		StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
