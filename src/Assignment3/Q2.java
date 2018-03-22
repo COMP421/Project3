@@ -386,6 +386,7 @@ public class Q2 extends Application
 		bloodManagement.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
+				bloodMgt.getChildren().remove(rootButton);
 				bloodMgt.add(rootButton, 8, 8);
 				pPrimaryStage.hide();
 				pPrimaryStage.setScene(bloodScene);
@@ -400,6 +401,7 @@ public class Q2 extends Application
 		switchS.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
+				donorRegisGrid.getChildren().remove(rootButton);
 				donorRegisGrid.add(rootButton, 8,8);
 				pPrimaryStage.hide();
 				pPrimaryStage.setScene(donorGridScene);
@@ -414,7 +416,7 @@ public class Q2 extends Application
 
 			@Override
 			public void handle(ActionEvent event) {
-
+				recordGrid.getChildren().remove(rootButton);
 				recordGrid.add(rootButton, 8, 8);
 				pPrimaryStage.hide();
 				pPrimaryStage.setScene(recordScene);
@@ -422,6 +424,75 @@ public class Q2 extends Application
 			}
 			
 		});
+		
+		
+		GridPane deleteGrid =  new GridPane();
+		
+		
+		
+		final DatePicker deletedate = new DatePicker();
+		deletedate.setConverter(converter);
+		deletedate.setPromptText("Delete Every blood expired before this date");
+		GridPane.setConstraints(deletedate, 0, 0);
+		
+		
+		Button deleteSubmit = new Button("submit");
+		deleteSubmit.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				String aString  = " delete from blood where (bloodId,bankId) in (select bloodid, bankid from blood where expdate < '"+deletedate.getValue().toString() +"' except (select B1.bloodid, B1.bankid from bloodsupply B1,blood B2 where B1.bankid = B2.bankid and B1.bloodid = B2.bloodid));";
+				System.out.println(aString);
+				try {
+					Class.forName("org.postgresql.Driver");
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String url = "jdbc:postgresql://comp421.cs.mcgill.ca:5432/cs421";
+				String userName = "cs421g05";
+				String password = "ASDFqwerty1234";
+				Connection con;
+				try {
+					con = DriverManager.getConnection(url, userName, password);
+					Statement stmt= con.createStatement();
+					stmt.executeUpdate(aString);
+				} catch (SQLException e) {
+					pPrimaryStage.hide();
+					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+					pPrimaryStage.show();
+				}
+				
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(errorSceneCreator("Successfully deleted"));
+				pPrimaryStage.show();
+			}
+			
+		});
+		
+		
+		deleteGrid.add(deleteSubmit, 5, 5);
+		
+		deleteGrid.getChildren().add(deletedate);
+		
+		
+		Scene deleteScene = new Scene(deleteGrid);
+		Button deleteexpire =  new Button("Delete expire");
+		deleteexpire.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				deleteGrid.getChildren().remove(rootButton);
+				deleteGrid.add(rootButton, 8, 8);
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(deleteScene);
+				pPrimaryStage.show();
+			}
+			
+		});
+		
+		root.add(deleteexpire, 0, 7);
+		
 		pPrimaryStage.setScene(rootScene);
 		pPrimaryStage.show();
 
