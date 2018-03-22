@@ -229,7 +229,7 @@ public class Q2 extends Application
 		});
 		
 		Button BloodDonation = new Button("Donate Blood");
-		root.add(BloodDonation,2,0);
+		root.add(BloodDonation,0,3);
 		
 		BloodDonation.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
@@ -243,68 +243,69 @@ public class Q2 extends Application
 		});
 		
 		//Creating a GridPane container
-				GridPane recordGrid = new GridPane();
-				recordGrid.setPadding(new Insets(10, 10, 10, 10));
-				recordGrid.setVgap(5);
-				recordGrid.setHgap(5);
-				//Defining the Name text field
-				
-				
-				
-				//Defining the Last Name text field
-				final TextField healthInsuranceNum = new TextField();
-				healthID.setPromptText("healthID.");
-				GridPane.setConstraints(healthInsuranceNum, 0, 0);
-				recordGrid.getChildren().add(healthInsuranceNum);
-				
-				
-				Button recordSubmit = new Button("Submit");
-				
-				recordSubmit.setOnAction(new EventHandler<ActionEvent>(){
-					@Override
-					public void handle(ActionEvent event) {
-						try {
-							Class.forName("org.postgresql.Driver");
-						} catch (ClassNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						String url = "jdbc:postgresql://comp421.cs.mcgill.ca:5432/cs421";
-						String userName = "cs421g05";
-						String password = "ASDFqwerty1234";
-						Connection con;
-						try {
-							con = DriverManager.getConnection(url, userName, password);
-							Statement stmt = con.createStatement();
-							ResultSet rs= stmt.executeQuery("select * from donation where healthinsurancenum =  '"+ healthInsuranceNum.getText() + "'");
-							while(rs.next()){
-								Donationdata.add(new Combo2(rs.getString("dateofdonation"), rs.getString("totalquantity"), rs.getString("dsaddress")));
-							}
-							
-							pPrimaryStage.hide();
-							pPrimaryStage.setScene(donationsceneCreator());
-							pPrimaryStage.show();
-						} catch (SQLException e) {
-							pPrimaryStage.hide();
-							pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
-							pPrimaryStage.show();
-						}	
+		GridPane recordGrid = new GridPane();
+		recordGrid.setPadding(new Insets(10, 10, 10, 10));
+		recordGrid.setVgap(5);
+		recordGrid.setHgap(5);
+		//Defining the Name text field
+		
+		
+		
+		//Defining the Last Name text field
+		final TextField healthInsuranceNum = new TextField();
+		healthID.setPromptText("healthID.");
+		GridPane.setConstraints(healthInsuranceNum, 0, 0);
+		recordGrid.getChildren().add(healthInsuranceNum);
+		
+		
+		Button recordSubmit = new Button("Submit");
+		
+		recordSubmit.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					Class.forName("org.postgresql.Driver");
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String url = "jdbc:postgresql://comp421.cs.mcgill.ca:5432/cs421";
+				String userName = "cs421g05";
+				String password = "ASDFqwerty1234";
+				Connection con;
+				try {
+					con = DriverManager.getConnection(url, userName, password);
+					Statement stmt = con.createStatement();
+					ResultSet rs= stmt.executeQuery("select * from donation where healthinsurancenum =  '"+ healthInsuranceNum.getText() + "'");
+					while(rs.next()){
+						Donationdata.add(new Combo2(rs.getString("dateofdonation"), rs.getString("totalquantity"), rs.getString("dsaddress")));
 					}
-				});
-				
-				GridPane.setConstraints(recordSubmit, 1, 1);
-				recordGrid.getChildren().add(recordSubmit);
-				Button quit = new Button("Quit");
-				recordGrid.add(quit,10,10);
-				quit.setOnAction(new EventHandler<ActionEvent>(){
-					@Override
-					public void handle(ActionEvent event) {
-						Platform.exit();
-					}
-				});
+					
+					pPrimaryStage.hide();
+					pPrimaryStage.setScene(donationsceneCreator());
+					pPrimaryStage.show();
+				} catch (SQLException e) {
+					pPrimaryStage.hide();
+					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+					pPrimaryStage.show();
+				}	
+			}
+		});
+		
+		GridPane.setConstraints(recordSubmit, 1, 1);
+		recordGrid.getChildren().add(recordSubmit);
+		Button quit = new Button("Quit");
+		recordGrid.add(quit,10,10);
+		root.add(quit,0,5);
+		quit.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				Platform.exit();
+			}
+		});
 		
 		Button record = new Button("Donation record");
-		root.add(record,3,0);
+		root.add(record,0,2);
 		record.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
@@ -316,14 +317,35 @@ public class Q2 extends Application
 			
 		});
 		
+		/*
+		GridPane.setConstraints(submitInMGT, 1, 1);
+		bloodMgt.getChildren().add(submitInMGT);
 		
+		Button mgtquit = new Button("Quit");
+		bloodMgt.add(mgtquit,1,20);
+		mgtquit.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				Platform.exit();
+			};
+		});
+*/
 		Button bloodManagement = new Button("Expired Blood Management");
 		GridPane bloodMgt = new GridPane();
-		root.add(bloodManagement, 1, 0);
+		root.add(bloodManagement, 0, 4);
 		final TextField bbankid = new TextField();
-		bbankid.setPromptText("Date");
+		Label bankId = new Label("Please enter the blood bank id you want to search for: ");
+		
+		GridPane.setConstraints(bankId, 0, 0);
+		bloodMgt.getChildren().add(bankId);
+		bbankid.setPromptText("bank id");
+		GridPane.setConstraints(bbankid, 0, 1);
 		bloodMgt.getChildren().add(bbankid);
+		
 		Button submitInMGT = new Button("Submit");
+		GridPane.setConstraints(submitInMGT, 1, 2);
+		bloodMgt.getChildren().add(submitInMGT);
+		
 		submitInMGT.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
@@ -340,7 +362,7 @@ public class Q2 extends Application
 				try {
 					con = DriverManager.getConnection(url, userName, password);
 					Statement stmt = con.createStatement();
-					ResultSet rs= stmt.executeQuery("select bloodtype, component, sum(quantity) as qt from blood group by bloodtype, component;");
+					ResultSet rs= stmt.executeQuery("select bloodtype, component, sum(quantity) as qt from blood where bankid = "+ bbankid.getText() + " group by bloodtype, component order by bloodtype;");
 					while(rs.next()){
 						data.add(new Combo(rs.getString("bloodtype"), rs.getString("component"), rs.getDouble("qt")));
 					}
@@ -355,7 +377,7 @@ public class Q2 extends Application
 				}	
 			}
 		});
-		bloodMgt.add(submitInMGT, 1, 0);
+		//bloodMgt.add(submitInMGT, 1, 0);
 		
 		bloodManagement.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
@@ -371,9 +393,10 @@ public class Q2 extends Application
 		pPrimaryStage.setHeight(5000);
 		pPrimaryStage.setWidth(5000);
 		pPrimaryStage.show();
-		
-		
-	}
+
+
+	};
+	
 	
 	
 	public static Scene sceneCreator(){

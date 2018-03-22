@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import Assignment3.Q2.Combo;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -37,6 +38,14 @@ public class BloodDonationOption {
 		GridPane.setConstraints(submit, 0, 1);
 		grid.getChildren().add(submit);
 		
+		Button quit = new Button("Quit");
+		grid.add(quit,10,10);
+		quit.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				Platform.exit();
+			}
+		});
 		
 		submit.setOnAction(new EventHandler<ActionEvent>(){
 
