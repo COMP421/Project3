@@ -214,36 +214,12 @@ public class Q2 extends Application
 			}
 			
 		});
-		Scene donorGridScene = new Scene(donorRegisGrid);
-		Button switchS = new Button("Donor Registration");
-		root.add(switchS,0,0);
-		
-		switchS.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event) {
-				pPrimaryStage.hide();
-				pPrimaryStage.setScene(donorGridScene);
-				pPrimaryStage.show();
-				
-			}
-		});
 		
 		
 		
 		
-		Button BloodDonation = new Button("Donate Blood");
-		root.add(BloodDonation,0,3);
 		
-		BloodDonation.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event) {
-				pPrimaryStage.hide();
-				pPrimaryStage.setScene(BloodDonationOption.healthInputScene(pPrimaryStage));
-				pPrimaryStage.setTitle("Blood Donation Option");
-				pPrimaryStage.show();
-				
-			}
-		});
+		
 		
 		//Creating a GridPane container
 		GridPane recordGrid = new GridPane();
@@ -307,19 +283,7 @@ public class Q2 extends Application
 			}
 		});
 		
-		Button record = new Button("Donation record");
-		root.add(record,0,2);
-		Scene recordScene = new Scene(recordGrid);
-		record.setOnAction(new EventHandler<ActionEvent>(){
-
-			@Override
-			public void handle(ActionEvent event) {
-				pPrimaryStage.hide();
-				pPrimaryStage.setScene(recordScene);
-				pPrimaryStage.show();
-			}
-			
-		});
+		
 		
 		/*
 		GridPane.setConstraints(submitInMGT, 1, 1);
@@ -382,20 +346,12 @@ public class Q2 extends Application
 			}
 		});
 		//bloodMgt.add(submitInMGT, 1, 0);
-		Scene bloodScene = new Scene(bloodMgt);
-		bloodManagement.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event) {
-				pPrimaryStage.hide();
-				pPrimaryStage.setScene(bloodScene);
-				pPrimaryStage.show();
-			}
-		});
+		
+		
 		Scene rootScene = new Scene(root);
-		pPrimaryStage.setScene(rootScene);
-		Button rootButton = new Button("Back To root");
+		
+		Button rootButton = new Button("Back To Main");
 
-		donorRegisGrid.add(rootButton, 3,3);
 		
 		rootButton.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
@@ -406,9 +362,67 @@ public class Q2 extends Application
 				
 			}
 		});
+		
 		pPrimaryStage.setTitle("Blood Donation Database");
 		pPrimaryStage.setHeight(500);
 		pPrimaryStage.setWidth(500);
+		
+		Button BloodDonation = new Button("Donate Blood");
+		root.add(BloodDonation,0,3);
+		
+		BloodDonation.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(BloodDonationOption.healthInputScene(pPrimaryStage, rootScene));
+				pPrimaryStage.setTitle("Blood Donation Option");
+				pPrimaryStage.show();
+				
+			}
+		});
+		
+		Scene bloodScene = new Scene(bloodMgt);
+		
+		bloodManagement.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				bloodMgt.add(rootButton, 8, 8);
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(bloodScene);
+				pPrimaryStage.show();
+			}
+		});
+		
+		Scene donorGridScene = new Scene(donorRegisGrid);
+		Button switchS = new Button("Donor Registration");
+		root.add(switchS,0,0);
+		
+		switchS.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				donorRegisGrid.add(rootButton, 8,8);
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(donorGridScene);
+				pPrimaryStage.show();
+				
+			}
+		});
+		Button record = new Button("Donation record");
+		root.add(record,0,2);
+		Scene recordScene = new Scene(recordGrid);
+		record.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				recordGrid.add(rootButton, 8, 8);
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(recordScene);
+				pPrimaryStage.show();
+			}
+			
+		});
+		pPrimaryStage.setScene(rootScene);
 		pPrimaryStage.show();
 
 

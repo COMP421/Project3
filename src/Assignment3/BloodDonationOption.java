@@ -25,7 +25,7 @@ public class BloodDonationOption {
 	
 	private final static String pattern = "yyyy-MM-dd";
 	
-	public static Scene healthInputScene(Stage pPrimaryStage){
+	public static Scene healthInputScene(Stage pPrimaryStage, Scene prevScene){
 		GridPane grid = new GridPane();
 		
 		final TextField id = new TextField();
@@ -95,6 +95,18 @@ public class BloodDonationOption {
 			
 		});
 		
+		Button rootButton = new Button("Back To Main Page");
+
+		rootButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(prevScene);
+				pPrimaryStage.show();
+				
+			}
+		});
+		grid.add(rootButton, 8, 8);
 		return new Scene(grid);
 	}
 	

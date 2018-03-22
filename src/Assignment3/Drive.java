@@ -34,7 +34,7 @@ public class Drive extends Application{
 	public void start(Stage pPrimaryStage) throws Exception 
 	{	
 		
-		pPrimaryStage.setScene(BloodDonationOption.healthInputScene(pPrimaryStage));
+		//pPrimaryStage.setScene(BloodDonationOption.healthInputScene(pPrimaryStage));
 		
 		pPrimaryStage.setTitle("Blood Donation Option");
 		pPrimaryStage.setHeight(500);
