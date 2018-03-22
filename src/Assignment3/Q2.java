@@ -42,7 +42,7 @@ public class Q2 extends Application
 	private static TableView<Combo> table = new TableView<Combo>();
 	
 	private static ObservableList<Combo2> Donationdata = FXCollections.observableArrayList();
-	private static TableView<Combo> Donationtable = new TableView<Combo>();
+	private static TableView<Combo2> Donationtable = new TableView<Combo2>();
 	private final String pattern = "yyyy-MM-dd";
 
 	/**
@@ -242,49 +242,80 @@ public class Q2 extends Application
 			}
 		});
 		
+		//Creating a GridPane container
+				GridPane recordGrid = new GridPane();
+				recordGrid.setPadding(new Insets(10, 10, 10, 10));
+				recordGrid.setVgap(5);
+				recordGrid.setHgap(5);
+				//Defining the Name text field
+				
+				
+				
+				//Defining the Last Name text field
+				final TextField healthInsuranceNum = new TextField();
+				healthID.setPromptText("healthID.");
+				GridPane.setConstraints(healthInsuranceNum, 0, 0);
+				recordGrid.getChildren().add(healthInsuranceNum);
+				
+				
+				Button recordSubmit = new Button("Submit");
+				
+				recordSubmit.setOnAction(new EventHandler<ActionEvent>(){
+					@Override
+					public void handle(ActionEvent event) {
+						try {
+							Class.forName("org.postgresql.Driver");
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						String url = "jdbc:postgresql://comp421.cs.mcgill.ca:5432/cs421";
+						String userName = "cs421g05";
+						String password = "ASDFqwerty1234";
+						Connection con;
+						try {
+							con = DriverManager.getConnection(url, userName, password);
+							Statement stmt = con.createStatement();
+							ResultSet rs= stmt.executeQuery("select * from donation where healthinsurancenum =  '"+ healthInsuranceNum.getText() + "'");
+							while(rs.next()){
+								Donationdata.add(new Combo2(rs.getString("dateofdonation"), rs.getString("totalquantity"), rs.getString("dsaddress")));
+							}
+							
+							pPrimaryStage.hide();
+							pPrimaryStage.setScene(donationsceneCreator());
+							pPrimaryStage.show();
+						} catch (SQLException e) {
+							pPrimaryStage.hide();
+							pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+							pPrimaryStage.show();
+						}	
+					}
+				});
+				
+				GridPane.setConstraints(recordSubmit, 1, 1);
+				recordGrid.getChildren().add(recordSubmit);
+				Button quit = new Button("Quit");
+				recordGrid.add(quit,10,10);
+				quit.setOnAction(new EventHandler<ActionEvent>(){
+					@Override
+					public void handle(ActionEvent event) {
+						Platform.exit();
+					}
+				});
+		
 		Button record = new Button("Donation record");
 		root.add(record,3,0);
-		
 		record.setOnAction(new EventHandler<ActionEvent>(){
+
 			@Override
 			public void handle(ActionEvent event) {
-				try {
-					Class.forName("org.postgresql.Driver");
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				String url = "jdbc:postgresql://comp421.cs.mcgill.ca:5432/cs421";
-				String userName = "cs421g05";
-				String password = "ASDFqwerty1234";
-				Connection con;
-				try {
-					con = DriverManager.getConnection(url, userName, password);
-					Statement stmt = con.createStatement();
-					ResultSet rs= stmt.executeQuery("select * from donation where healthinsurancenum =  'YAND 9609 1510'");
-					while(rs.next()){
-						Donationdata.add(new Combo2(rs.getString("dateofdonation"), rs.getString("totalquantity"), rs.getString("dsaddress")));
-					}
-					
-					pPrimaryStage.hide();
-					pPrimaryStage.setScene(donationsceneCreator());
-					pPrimaryStage.show();
-				} catch (SQLException e) {
-					pPrimaryStage.hide();
-					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
-					pPrimaryStage.show();
-				}	
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(new Scene(recordGrid));
+				pPrimaryStage.show();
 			}
+			
 		});
 		
-		Button quit = new Button("Quit");
-		donorRegisGrid.add(quit,10,10);
-		quit.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event) {
-				Platform.exit();
-			}
-		});
 		
 		Button bloodManagement = new Button("Expired Blood Management");
 		GridPane bloodMgt = new GridPane();
@@ -343,8 +374,6 @@ public class Q2 extends Application
 		
 		
 	}
-	
-	
 	
 	
 	public static Scene sceneCreator(){
