@@ -40,6 +40,9 @@ public class Q2 extends Application
 {
 	private static ObservableList<Combo> data = FXCollections.observableArrayList();
 	private static TableView<Combo> table = new TableView<Combo>();
+	
+	private static ObservableList<Combo2> Donationdata = FXCollections.observableArrayList();
+	private static TableView<Combo> Donationtable = new TableView<Combo>();
 	private final String pattern = "yyyy-MM-dd";
 
 	/**
@@ -153,7 +156,6 @@ public class Q2 extends Application
 		GridPane.setConstraints(height, 0, 8);
 		donorRegisGrid.getChildren().add(height);
 		
-		
 		//Defining the Submit button
 		Button submit = new Button("Submit");
 		GridPane.setConstraints(submit, 1, 9);
@@ -165,6 +167,28 @@ public class Q2 extends Application
 
 			@Override
 			public void handle(ActionEvent event) {
+				String errorMessage = "";
+				boolean thereIsAnError = false;
+//				if(2018 - date.getValue().getYear() < 16 ||2018 - date.getValue().getYear() > 122){
+//					errorMessage = "age not eligible";
+//					thereIsAnError = true;
+//				}
+//				else if(Double.parseDouble(weight.getText()) < 50 || Double.parseDouble(weight.getText()) > 500 ){
+//					errorMessage = "weight not eligible";
+//					thereIsAnError = true;
+//				}
+//				else if(Double.parseDouble(height.getText()) > 240){
+//					errorMessage = "Height not realistic";
+//					thereIsAnError = true;
+//				}
+//				if(thereIsAnError){
+//					pPrimaryStage.hide();
+//					pPrimaryStage.setScene(errorSceneCreator(errorMessage));
+//					pPrimaryStage.show();
+//					return;
+//				}
+				
+				
 				String aString  = "insert into donor values('" + healthID.getText() +"'," + "'" + dname.getText()+"',"+ "'" +date.getValue().toString() +"',"+ "'" + address.getText() + "',"+ "'" +gender.getValue().toString() + "',"+ "'" +btype.getValue().toString()  + "','"+ phone.getText() +"',"+ "'" +weight.getText() + "',"+ "'" +height.getText() + "'" + ");";
 				System.out.println(aString);
 				try {
@@ -182,8 +206,12 @@ public class Q2 extends Application
 					Statement stmt= con.createStatement();
 					stmt.executeUpdate(aString);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					pPrimaryStage.hide();
+					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+					pPrimaryStage.show();
 				}
+				
+				
 			}
 			
 		});
@@ -197,6 +225,55 @@ public class Q2 extends Application
 				pPrimaryStage.setScene(new Scene(donorRegisGrid));
 				pPrimaryStage.show();
 				
+			}
+		});
+		
+		Button BloodDonation = new Button("Donate Blood");
+		root.add(BloodDonation,2,0);
+		
+		BloodDonation.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(BloodDonationOption.healthInputScene(pPrimaryStage));
+				pPrimaryStage.setTitle("Blood Donation Option");
+				pPrimaryStage.show();
+				
+			}
+		});
+		
+		Button record = new Button("Donation record");
+		root.add(record,3,0);
+		
+		record.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					Class.forName("org.postgresql.Driver");
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String url = "jdbc:postgresql://comp421.cs.mcgill.ca:5432/cs421";
+				String userName = "cs421g05";
+				String password = "ASDFqwerty1234";
+				Connection con;
+				try {
+					con = DriverManager.getConnection(url, userName, password);
+					Statement stmt = con.createStatement();
+					ResultSet rs= stmt.executeQuery("select * from donation where healthinsurancenum =  'YAND 9609 1510'");
+					while(rs.next()){
+						Donationdata.add(new Combo2(rs.getString("dateofdonation"), rs.getString("totalquantity"), rs.getString("dsaddress")));
+					}
+					
+					pPrimaryStage.hide();
+					pPrimaryStage.setScene(donationsceneCreator());
+					pPrimaryStage.show();
+				} catch (SQLException e) {
+					pPrimaryStage.hide();
+					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+					pPrimaryStage.show();
+				}	
 			}
 		});
 		
@@ -241,8 +318,9 @@ public class Q2 extends Application
 					pPrimaryStage.setScene(sceneCreator());
 					pPrimaryStage.show();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					pPrimaryStage.hide();
+					pPrimaryStage.setScene(errorSceneCreator(e.getMessage()));
+					pPrimaryStage.show();
 				}	
 			}
 		});
@@ -254,16 +332,13 @@ public class Q2 extends Application
 				pPrimaryStage.hide();
 				pPrimaryStage.setScene(new Scene(bloodMgt));
 				pPrimaryStage.show();
-				
-				
-				
 			}
 		});
 		
 		pPrimaryStage.setScene(new Scene(root));
 		pPrimaryStage.setTitle("Blood Donation Database");
-		pPrimaryStage.setHeight(500);
-		pPrimaryStage.setWidth(500);
+		pPrimaryStage.setHeight(5000);
+		pPrimaryStage.setWidth(5000);
 		pPrimaryStage.show();
 		
 		
@@ -306,8 +381,53 @@ public class Q2 extends Application
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
 		return scene;
 	}
+	
+	public static Scene donationsceneCreator(){
+		Scene scene = new Scene(new Group());
+ 
+        final Label label = new Label("Donor info");
+        label.setFont(new Font("Arial", 20));
+ 
+        Donationtable.setEditable(true);
+ 
+        TableColumn firstNameCol = new TableColumn("Donation date");
+        firstNameCol.setMinWidth(100);
+        firstNameCol.setCellValueFactory(
+                new PropertyValueFactory<Combo, String>("firstName"));
+ 
+        TableColumn lastNameCol = new TableColumn("Donation quantity");
+        lastNameCol.setMinWidth(100);
+        lastNameCol.setCellValueFactory(
+                new PropertyValueFactory<Combo, String>("lastName"));
+ 
+        TableColumn emailCol = new TableColumn("donation Address");
+        emailCol.setMinWidth(200);
+        emailCol.setCellValueFactory(
+                new PropertyValueFactory<Combo, String>("email"));
+ 
+        Donationtable.setItems(Donationdata);
+        Donationtable.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+ 
+        final VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 0, 0, 10));
+        vbox.getChildren().addAll(label, Donationtable);
+ 
+        ((Group) scene.getRoot()).getChildren().addAll(vbox);
+		return scene;
+	}
+	
+	public static Scene errorSceneCreator(String message){
+        final Label label = new Label(message);
+        label.setFont(new Font("Arial", 20));
+ 
+        GridPane grid = new GridPane();
+        grid.getChildren().add(label);
+        
+		return new Scene(grid);
+	}
 	public static class Combo {
-		 
+		
         private final SimpleStringProperty firstName;
         private final SimpleStringProperty lastName;
         private final SimpleDoubleProperty email;
@@ -339,6 +459,43 @@ public class Q2 extends Application
         }
  
         public void setEmail(double fName) {
+            email.set(fName);
+        }
+    }
+	
+public static class Combo2 {
+		
+        private final SimpleStringProperty firstName;
+        private final SimpleStringProperty lastName;
+        private final SimpleStringProperty email;
+ 
+        private Combo2(String BloodType, String BloodComponent, String quantity) {
+            this.firstName = new SimpleStringProperty(BloodType);
+            this.lastName = new SimpleStringProperty(BloodComponent);
+            this.email = new SimpleStringProperty(quantity);
+        }
+ 
+        public String getFirstName() {
+            return firstName.get();
+        }
+ 
+        public void setFirstName(String fName) {
+            firstName.set(fName);
+        }
+ 
+        public String getLastName() {
+            return lastName.get();
+        }
+ 
+        public void setLastName(String fName) {
+            lastName.set(fName);
+        }
+ 
+        public String getEmail() {
+            return email.get();
+        }
+ 
+        public void setEmail(String fName) {
             email.set(fName);
         }
     }
