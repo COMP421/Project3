@@ -228,6 +228,9 @@ public class Q2 extends Application
 			}
 		});
 		
+		
+		
+		
 		Button BloodDonation = new Button("Donate Blood");
 		root.add(BloodDonation,0,3);
 		
@@ -387,8 +390,21 @@ public class Q2 extends Application
 				pPrimaryStage.show();
 			}
 		});
+		Scene rootScene = new Scene(root);
+		pPrimaryStage.setScene(rootScene);
+		Button rootButton = new Button("Back To root");
+
+		donorRegisGrid.add(rootButton, 3,3);
 		
-		pPrimaryStage.setScene(new Scene(root));
+		rootButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				pPrimaryStage.hide();
+				pPrimaryStage.setScene(rootScene);
+				pPrimaryStage.show();
+				
+			}
+		});
 		pPrimaryStage.setTitle("Blood Donation Database");
 		pPrimaryStage.setHeight(5000);
 		pPrimaryStage.setWidth(5000);
