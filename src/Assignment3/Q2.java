@@ -390,8 +390,8 @@ public class Q2 extends Application
 		
 		pPrimaryStage.setScene(new Scene(root));
 		pPrimaryStage.setTitle("Blood Donation Database");
-		pPrimaryStage.setHeight(5000);
-		pPrimaryStage.setWidth(5000);
+		pPrimaryStage.setHeight(500);
+		pPrimaryStage.setWidth(500);
 		pPrimaryStage.show();
 
 
