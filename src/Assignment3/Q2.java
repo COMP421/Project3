@@ -86,12 +86,18 @@ public class Q2 extends Application
 		//Defining the Last Name text field
 		final TextField healthID = new TextField();
 		healthID.setPromptText("healthID.");
-		GridPane.setConstraints(healthID, 0, 0);
+		Label hin1L = new Label("Please enter the donor's health insurance number: ");
+		GridPane.setConstraints(hin1L, 0, 0);
+		donorRegisGrid.getChildren().add(hin1L);
+		GridPane.setConstraints(healthID, 0, 1);
 		donorRegisGrid.getChildren().add(healthID);
 		
 		final TextField dname = new TextField();
-		dname.setPromptText("Enter your full name.");
-		GridPane.setConstraints(dname, 0, 1);
+		dname.setPromptText("full name");
+		Label dnL = new Label("Please enter the donor's full name: ");
+		GridPane.setConstraints(dnL, 0, 2);
+		donorRegisGrid.getChildren().add(dnL);
+		GridPane.setConstraints(dname, 0, 3);
 		donorRegisGrid.getChildren().add(dname);
 		
 		StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
@@ -117,47 +123,62 @@ public class Q2 extends Application
 		
 		final DatePicker date = new DatePicker();
 		date.setConverter(converter);
-		date.setPromptText("Date");
-		GridPane.setConstraints(date, 0, 2);
+		date.setPromptText("YYYY-MM-DD");
+		Label date1L = new Label("Please enter the date: ");
+		GridPane.setConstraints(date1L, 0, 4);
+		donorRegisGrid.getChildren().add(date1L);
+		GridPane.setConstraints(date, 0, 5);
 		donorRegisGrid.getChildren().add(date);
 		
 		final TextField address = new TextField();
 		address.setPromptText("Address.");
-		GridPane.setConstraints(address, 0, 3);
+		Label a1L = new Label("Please enter the donor's address: ");
+		GridPane.setConstraints(a1L, 0, 6);
+		donorRegisGrid.getChildren().add(a1L);
+		GridPane.setConstraints(address, 0, 7);
 		donorRegisGrid.getChildren().add(address);
 		
 		final ObservableList<String> genderType = FXCollections.observableArrayList("Male", "Female", "Other");
 		final ComboBox gender = new ComboBox(genderType);
 		gender.setPromptText("Gender");
-		GridPane.setConstraints(gender, 0, 4);
+		GridPane.setConstraints(gender, 0, 8);
 		donorRegisGrid.getChildren().add(gender);
 		
 		final ObservableList<String> bloodtype = FXCollections.observableArrayList("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-");
 		final ComboBox btype = new ComboBox(bloodtype);
 		btype.setPromptText("Blood type");
-		GridPane.setConstraints(btype, 0, 5);
+		GridPane.setConstraints(btype, 0, 9);
 		donorRegisGrid.getChildren().add(btype);
 		
 		//Defining the Comment text field
 		final TextField phone = new TextField();
 		phone.setPrefColumnCount(15);
 		phone.setPromptText("phone number");
-		GridPane.setConstraints(phone, 0, 6);
+		Label pL = new Label("Please enter the donor's phone number: ");
+		GridPane.setConstraints(pL, 0, 10);
+		donorRegisGrid.getChildren().add(pL);
+		GridPane.setConstraints(phone, 0, 11);
 		donorRegisGrid.getChildren().add(phone);
 		
 		final TextField weight = new TextField();
 		weight.setPromptText("weight");
-		GridPane.setConstraints(weight, 0, 7);
+		Label wL = new Label("Please enter the donor's weight: ");
+		GridPane.setConstraints(wL, 0, 12);
+		donorRegisGrid.getChildren().add(wL);
+		GridPane.setConstraints(weight, 0, 13);
 		donorRegisGrid.getChildren().add(weight);
 		
 		final TextField height = new TextField();
 		height.setPromptText("height");
-		GridPane.setConstraints(height, 0, 8);
+		Label h1L = new Label("Please enter the donor's height: ");
+		GridPane.setConstraints(h1L, 0, 14);
+		donorRegisGrid.getChildren().add(h1L);
+		GridPane.setConstraints(height, 0, 15);
 		donorRegisGrid.getChildren().add(height);
 		
 		//Defining the Submit button
 		Button submit = new Button("Submit");
-		GridPane.setConstraints(submit, 1, 9);
+		GridPane.setConstraints(submit, 1, 16);
 		donorRegisGrid.getChildren().add(submit);
 		
 		Scene rootScene = new Scene(root);
@@ -233,7 +254,10 @@ public class Q2 extends Application
 		//Defining the Last Name text field
 		final TextField healthInsuranceNum = new TextField();
 		healthID.setPromptText("healthID.");
-		GridPane.setConstraints(healthInsuranceNum, 0, 0);
+		Label hin2L = new Label("Please enter the donor's health insurance number: ");
+		GridPane.setConstraints(hin2L, 0, 0);
+		recordGrid.getChildren().add(hin2L);
+		GridPane.setConstraints(healthInsuranceNum, 0, 1);
 		recordGrid.getChildren().add(healthInsuranceNum);
 		
 		
@@ -271,11 +295,11 @@ public class Q2 extends Application
 			}
 		});
 		
-		GridPane.setConstraints(recordSubmit, 1, 1);
+		GridPane.setConstraints(recordSubmit, 1, 2);
 		recordGrid.getChildren().add(recordSubmit);
 		Button quit = new Button("Quit");
 		recordGrid.add(quit,10,10);
-		root.add(quit,0,5);
+		root.add(quit,8,8);
 		quit.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
@@ -303,7 +327,6 @@ public class Q2 extends Application
 		root.add(bloodManagement, 0, 4);
 		final TextField bbankid = new TextField();
 		Label bankId = new Label("Please enter the blood bank id you want to search for: ");
-		
 		GridPane.setConstraints(bankId, 0, 0);
 		bloodMgt.getChildren().add(bankId);
 		bbankid.setPromptText("bank id");
@@ -387,7 +410,7 @@ public class Q2 extends Application
 			@Override
 			public void handle(ActionEvent event) {
 				bloodMgt.getChildren().remove(rootButton);
-				bloodMgt.add(rootButton, 8, 8);
+				bloodMgt.add(rootButton, 1, 3);
 				pPrimaryStage.hide();
 				pPrimaryStage.setScene(bloodScene);
 				pPrimaryStage.show();
@@ -402,7 +425,7 @@ public class Q2 extends Application
 			@Override
 			public void handle(ActionEvent event) {
 				donorRegisGrid.getChildren().remove(rootButton);
-				donorRegisGrid.add(rootButton, 8,8);
+				donorRegisGrid.add(rootButton, 1,17);
 				pPrimaryStage.hide();
 				pPrimaryStage.setScene(donorGridScene);
 				pPrimaryStage.show();
@@ -417,7 +440,7 @@ public class Q2 extends Application
 			@Override
 			public void handle(ActionEvent event) {
 				recordGrid.getChildren().remove(rootButton);
-				recordGrid.add(rootButton, 8, 8);
+				recordGrid.add(rootButton, 1, 4);
 				pPrimaryStage.hide();
 				pPrimaryStage.setScene(recordScene);
 				pPrimaryStage.show();
@@ -432,8 +455,11 @@ public class Q2 extends Application
 		
 		final DatePicker deletedate = new DatePicker();
 		deletedate.setConverter(converter);
-		deletedate.setPromptText("Delete Every blood expired before this date");
-		GridPane.setConstraints(deletedate, 0, 0);
+		deletedate.setPromptText("date YYYY-MM-DD");
+		Label d2L = new Label("Delete every blood expired before this date: ");
+		GridPane.setConstraints(d2L, 0, 0);
+		deleteGrid.getChildren().add(d2L);
+		GridPane.setConstraints(deletedate, 0, 1);
 		
 		
 		Button deleteSubmit = new Button("Submit");
@@ -478,11 +504,11 @@ public class Q2 extends Application
 		});
 		
 		
-		deleteGrid.add(deleteSubmit, 5, 5);
+		deleteGrid.add(deleteSubmit, 1, 2);
 		
 		deleteGrid.getChildren().add(deletedate);
 		
-		
+/* where did we use it? */		
 		Scene deleteScene = new Scene(deleteGrid);
 		Button deleteexpire =  new Button("Delete expire");
 		deleteexpire.setOnAction(new EventHandler<ActionEvent>(){
@@ -490,7 +516,7 @@ public class Q2 extends Application
 			@Override
 			public void handle(ActionEvent event) {
 				deleteGrid.getChildren().remove(rootButton);
-				deleteGrid.add(rootButton, 8, 8);
+				deleteGrid.add(rootButton, 1, 3);
 				pPrimaryStage.hide();
 				pPrimaryStage.setScene(deleteScene);
 				pPrimaryStage.show();

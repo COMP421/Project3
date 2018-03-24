@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -31,15 +32,18 @@ public class BloodDonationOption {
 		final TextField id = new TextField();
 		id.setPrefColumnCount(15);
 		id.setPromptText("HealthInsuranceNumber");
-		GridPane.setConstraints(id, 0, 0);
+		Label hin3L = new Label("Please enter the donor's health insurance number: ");
+		GridPane.setConstraints(hin3L, 0, 0);
+		grid.getChildren().add(hin3L);
+		GridPane.setConstraints(id, 0, 1);
 		grid.getChildren().add(id);
 		
 		Button submit = new Button("submit");
-		GridPane.setConstraints(submit, 0, 1);
+		GridPane.setConstraints(submit, 1, 2);
 		grid.getChildren().add(submit);
 		
 		Button quit = new Button("Quit");
-		grid.add(quit,10,10);
+		grid.add(quit,1,4);
 		quit.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
@@ -106,7 +110,7 @@ public class BloodDonationOption {
 				
 			}
 		});
-		grid.add(rootButton, 8, 8);
+		grid.add(rootButton, 1, 3);
 		return new Scene(grid);
 	}
 	
@@ -116,7 +120,10 @@ public class BloodDonationOption {
 		final TextField did = new TextField();
 		did.setPrefColumnCount(15);
 		did.setPromptText("Did");
-		GridPane.setConstraints(did, 0, 0);
+		Label didL = new Label("Please enter the donor's ID number: ");
+		GridPane.setConstraints(didL, 0, 0);
+		grid.getChildren().add(didL);
+		GridPane.setConstraints(did, 0, 1);
 		grid.getChildren().add(did);
 		
 		
@@ -142,23 +149,32 @@ public class BloodDonationOption {
         }; 
 		final DatePicker date = new DatePicker();
 		date.setConverter(converter);
-		date.setPromptText("Date");
-		GridPane.setConstraints(date, 0, 1);
+		date.setPromptText("YYYY-MM-DD");
+		Label dL = new Label("Please enter the date: ");
+		GridPane.setConstraints(dL, 0, 2);
+		grid.getChildren().add(dL);
+		GridPane.setConstraints(date, 0, 3);
 		grid.getChildren().add(date);
 		
 		final TextField qty = new TextField();
 		qty.setPromptText("qty");
-		GridPane.setConstraints(qty, 0, 2);
+		Label qL = new Label("Please enter the quantity donated: ");
+		GridPane.setConstraints(qL, 0, 4);
+		grid.getChildren().add(qL);
+		GridPane.setConstraints(qty, 0, 5);
 		grid.getChildren().add(qty);
 		
 		final TextField address = new TextField();
 		address.setPromptText("stationAddress");
-		GridPane.setConstraints(address, 0, 3);
+		Label dsaddrL = new Label("Please enter the donation station's address: ");
+		GridPane.setConstraints(dsaddrL, 0, 6);
+		grid.getChildren().add(dsaddrL);
+		GridPane.setConstraints(address, 0, 7);
 		grid.getChildren().add(address);
 		
 		//Defining the Submit button
-		Button submit = new Button("stationAddress");
-		GridPane.setConstraints(submit, 0, 4);
+		Button submit = new Button("submit");
+		GridPane.setConstraints(submit, 1, 8);
 		grid.getChildren().add(submit);
 		
 		submit.setOnAction(new EventHandler<ActionEvent>(){
@@ -191,6 +207,7 @@ public class BloodDonationOption {
 					pPrimaryStage.show();
 				}
 			}
+			
 		
 		});
 		
