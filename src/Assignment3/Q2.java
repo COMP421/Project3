@@ -124,7 +124,7 @@ public class Q2 extends Application
 		final DatePicker date = new DatePicker();
 		date.setConverter(converter);
 		date.setPromptText("YYYY-MM-DD");
-		Label date1L = new Label("Please enter the date: ");
+		Label date1L = new Label("Please enter the date of birth: ");
 		GridPane.setConstraints(date1L, 0, 4);
 		donorRegisGrid.getChildren().add(date1L);
 		GridPane.setConstraints(date, 0, 5);
@@ -187,26 +187,6 @@ public class Q2 extends Application
 
 			@Override
 			public void handle(ActionEvent event) {
-				String errorMessage = "";
-				boolean thereIsAnError = false;
-//				if(2018 - date.getValue().getYear() < 16 ||2018 - date.getValue().getYear() > 122){
-//					errorMessage = "age not eligible";
-//					thereIsAnError = true;
-//				}
-//				else if(Double.parseDouble(weight.getText()) < 50 || Double.parseDouble(weight.getText()) > 500 ){
-//					errorMessage = "weight not eligible";
-//					thereIsAnError = true;
-//				}
-//				else if(Double.parseDouble(height.getText()) > 240){
-//					errorMessage = "Height not realistic";
-//					thereIsAnError = true;
-//				}
-//				if(thereIsAnError){
-//					pPrimaryStage.hide();
-//					pPrimaryStage.setScene(errorSceneCreator(errorMessage));
-//					pPrimaryStage.show();
-//					return;
-//				}
 				
 				
 				String aString  = "insert into donor values('" + healthID.getText() +"'," + "'" + dname.getText()+"',"+ "'" +date.getValue().toString() +"',"+ "'" + address.getText() + "',"+ "'" +gender.getValue().toString() + "',"+ "'" +btype.getValue().toString()  + "','"+ phone.getText() +"',"+ "'" +weight.getText() + "',"+ "'" +height.getText() + "'" + ");";
@@ -225,13 +205,16 @@ public class Q2 extends Application
 					con = DriverManager.getConnection(url, userName, password);
 					Statement stmt= con.createStatement();
 					stmt.executeUpdate(aString);
+					pPrimaryStage.hide();
+					pPrimaryStage.setScene(errorSceneCreator("Donor successfully added", pPrimaryStage, rootScene));
+					pPrimaryStage.show();
+					stmt.close();
+					con.close();
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
 					pPrimaryStage.setScene(errorSceneCreator(e.getMessage(), pPrimaryStage, rootScene));
 					pPrimaryStage.show();
 				}
-				
-				
 			}
 			
 		});
@@ -280,12 +263,14 @@ public class Q2 extends Application
 					con = DriverManager.getConnection(url, userName, password);
 					Statement stmt = con.createStatement();
 					ResultSet rs= stmt.executeQuery("select * from donation where healthinsurancenum =  '"+ healthInsuranceNum.getText() + "'");
+					Donationdata.clear();
 					while(rs.next()){
 						Donationdata.add(new Combo2(rs.getString("dateofdonation"), rs.getString("totalquantity"), rs.getString("dsaddress")));
 					}
-					
+					stmt.close();
+					con.close();
 					pPrimaryStage.hide();
-					pPrimaryStage.setScene(donationsceneCreator());
+					pPrimaryStage.setScene(donationsceneCreator(rootScene, pPrimaryStage));
 					pPrimaryStage.show();
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
@@ -354,12 +339,13 @@ public class Q2 extends Application
 					con = DriverManager.getConnection(url, userName, password);
 					Statement stmt = con.createStatement();
 					ResultSet rs= stmt.executeQuery("select bloodtype, component, sum(quantity) as qt from blood where bankid = "+ bbankid.getText() + " group by bloodtype, component order by bloodtype;");
+					data.clear();
 					while(rs.next()){
 						data.add(new Combo(rs.getString("bloodtype"), rs.getString("component"), rs.getDouble("qt")));
 					}
 					
 					pPrimaryStage.hide();
-					pPrimaryStage.setScene(sceneCreator());
+					pPrimaryStage.setScene(sceneCreator(rootScene, pPrimaryStage));
 					pPrimaryStage.show();
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
@@ -373,7 +359,7 @@ public class Q2 extends Application
 		
 		
 		
-		Button rootButton = new Button("Back To Main");
+		Button rootButton = new Button("Back To Main Page");
 
 		
 		rootButton.setOnAction(new EventHandler<ActionEvent>(){
@@ -490,6 +476,8 @@ public class Q2 extends Application
 					con = DriverManager.getConnection(url, userName, password);
 					Statement stmt= con.createStatement();
 					stmt.executeUpdate(aString);
+					stmt.close();
+					con.close();
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
 					pPrimaryStage.setScene(errorSceneCreator(e.getMessage(),pPrimaryStage,rootScene));
@@ -534,13 +522,14 @@ public class Q2 extends Application
 	
 	
 	
-	public static Scene sceneCreator(){
+	public static Scene sceneCreator(Scene mainScene, Stage s){
 		Scene scene = new Scene(new Group());
  
         final Label label = new Label("Blood Book");
         label.setFont(new Font("Arial", 20));
  
         table.setEditable(true);
+        table.getColumns().clear();
  
         TableColumn firstNameCol = new TableColumn("Blood type");
         firstNameCol.setMinWidth(100);
@@ -566,16 +555,31 @@ public class Q2 extends Application
         vbox.getChildren().addAll(label, table);
  
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
+        Button rootButton = new Button("Back To Main Page");
+
+		rootButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				s.hide();
+				s.setScene(mainScene);
+				s.show();
+				
+			}
+		});
+		GridPane grid = new GridPane();
+        grid.add(rootButton, 25, 25);
+        ((Group) scene.getRoot()).getChildren().add(grid);
 		return scene;
 	}
 	
-	public static Scene donationsceneCreator(){
+	public static Scene donationsceneCreator(Scene mainScene, Stage s){
 		Scene scene = new Scene(new Group());
  
         final Label label = new Label("Donor info");
         label.setFont(new Font("Arial", 20));
  
         Donationtable.setEditable(true);
+        Donationtable.getColumns().clear();
  
         TableColumn firstNameCol = new TableColumn("Donation date");
         firstNameCol.setMinWidth(100);
@@ -601,6 +605,20 @@ public class Q2 extends Application
         vbox.getChildren().addAll(label, Donationtable);
  
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
+        Button rootButton = new Button("Back To Main Page");
+
+		rootButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				s.hide();
+				s.setScene(mainScene);
+				s.show();
+				
+			}
+		});
+		GridPane grid = new GridPane();
+        grid.add(rootButton, 25, 25);
+        ((Group) scene.getRoot()).getChildren().add(grid);
 		return scene;
 	}
 	

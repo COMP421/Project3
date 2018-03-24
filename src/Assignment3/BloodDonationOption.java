@@ -38,25 +38,26 @@ public class BloodDonationOption {
 		GridPane.setConstraints(id, 0, 1);
 		grid.getChildren().add(id);
 		
-		Button submit = new Button("submit");
-		GridPane.setConstraints(submit, 1, 2);
-		grid.getChildren().add(submit);
+		final TextField address = new TextField();
+		address.setPromptText("stationAddress");
+		Label dsaddrL = new Label("Please enter the donation station's address: ");
+		GridPane.setConstraints(dsaddrL, 0, 2);
+		grid.getChildren().add(dsaddrL);
+		GridPane.setConstraints(address, 0, 3);
+		grid.getChildren().add(address);
 		
-		Button quit = new Button("Quit");
-		grid.add(quit,1,4);
-		quit.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event) {
-				Platform.exit();
-			}
-		});
+		Button submit = new Button("submit");
+		GridPane.setConstraints(submit, 1, 4);
+		grid.getChildren().add(submit);
 		
 		submit.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
 			public void handle(ActionEvent event) {
 				String HealthId = id.getText();
-				String query = "select count(*) from donor where healthinsurancenum = '" + HealthId + "' ;" ;
+				String dsAddress = address.getText();
+				String queryforDonor = "select count(*) from donor where healthinsurancenum = '" + HealthId + "' ;" ;
+				String queryforStation = "select count(*) from donationstation where dsaddress ='" + dsAddress + "'; " ;
 				try {
 					Class.forName("org.postgresql.Driver");
 				} catch (ClassNotFoundException e) {
@@ -70,24 +71,36 @@ public class BloodDonationOption {
 				try {
 					con = DriverManager.getConnection(url, userName, password);
 					Statement stmt = con.createStatement();
-					ResultSet rs= stmt.executeQuery(query);
-					
-					int exist = 0;
-					
+					ResultSet rs= stmt.executeQuery(queryforDonor);
+					int existforDonor = 0;
 					while(rs.next()){
-						exist = rs.getInt(1);
+						existforDonor = rs.getInt(1);
 					}
-					
-					if(exist == 1){
+					rs.close();
+					ResultSet rs2= stmt.executeQuery(queryforStation);
+					int existforStation = 0;
+					while(rs2.next()){
+						existforStation = rs2.getInt(1);
+					}
+					rs2.close();
+					if(existforDonor == 0){
 						pPrimaryStage.hide();
-						pPrimaryStage.setScene(bloodDonationOptionScene(pPrimaryStage, HealthId, prevScene));
+						pPrimaryStage.setScene(Q2.errorSceneCreator("Donor health insurance number not found", pPrimaryStage, prevScene));
+						pPrimaryStage.show();
+					}
+					else if(existforStation == 0){
+						pPrimaryStage.hide();
+						pPrimaryStage.setScene(Q2.errorSceneCreator("Donation address not found", pPrimaryStage, prevScene));
 						pPrimaryStage.show();
 					}
 					else{
 						pPrimaryStage.hide();
-						pPrimaryStage.setScene(Q2.errorSceneCreator("Not found", pPrimaryStage, prevScene));
+						pPrimaryStage.setScene(bloodDonationOptionScene(pPrimaryStage, HealthId, dsAddress , prevScene));
 						pPrimaryStage.show();
+						
 					}
+					stmt.close();
+					con.close();
 					
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
@@ -110,17 +123,17 @@ public class BloodDonationOption {
 				
 			}
 		});
-		grid.add(rootButton, 1, 3);
+		grid.add(rootButton, 1, 5);
 		return new Scene(grid);
 	}
 	
-	public static Scene bloodDonationOptionScene(Stage pPrimaryStage, String HealthID, Scene prevScene){
+	public static Scene bloodDonationOptionScene(Stage pPrimaryStage, String HealthID, String address, Scene prevScene){
 		GridPane grid = new GridPane();
 		
 		final TextField did = new TextField();
 		did.setPrefColumnCount(15);
 		did.setPromptText("Did");
-		Label didL = new Label("Please enter the donor's ID number: ");
+		Label didL = new Label("Please choose a donation ID number: ");
 		GridPane.setConstraints(didL, 0, 0);
 		grid.getChildren().add(didL);
 		GridPane.setConstraints(did, 0, 1);
@@ -150,7 +163,7 @@ public class BloodDonationOption {
 		final DatePicker date = new DatePicker();
 		date.setConverter(converter);
 		date.setPromptText("YYYY-MM-DD");
-		Label dL = new Label("Please enter the date: ");
+		Label dL = new Label("Please enter the date of donation: ");
 		GridPane.setConstraints(dL, 0, 2);
 		grid.getChildren().add(dL);
 		GridPane.setConstraints(date, 0, 3);
@@ -164,13 +177,7 @@ public class BloodDonationOption {
 		GridPane.setConstraints(qty, 0, 5);
 		grid.getChildren().add(qty);
 		
-		final TextField address = new TextField();
-		address.setPromptText("stationAddress");
-		Label dsaddrL = new Label("Please enter the donation station's address: ");
-		GridPane.setConstraints(dsaddrL, 0, 6);
-		grid.getChildren().add(dsaddrL);
-		GridPane.setConstraints(address, 0, 7);
-		grid.getChildren().add(address);
+		
 		
 		//Defining the Submit button
 		Button submit = new Button("submit");
@@ -181,7 +188,7 @@ public class BloodDonationOption {
 
 			@Override
 			public void handle(ActionEvent event) {
-				String aString  = "insert into donation values('" + did.getText() +"'," + "'" + date.getValue().toString()+"',"+ "'" +qty.getText() +"',"+ "'" + address.getText() + "',"+ "'" +HealthID + "'" + ");";
+				String aString  = "insert into donation values('" + did.getText() +"'," + "'" + date.getValue().toString()+"',"+ "'" +qty.getText() +"',"+ "'" + address + "',"+ "'" +HealthID + "'" + ");";
 				System.out.println(aString);
 				try {
 					Class.forName("org.postgresql.Driver");
@@ -195,12 +202,14 @@ public class BloodDonationOption {
 				Connection con;
 				
 				pPrimaryStage.hide();
-				pPrimaryStage.setScene(Q2.errorSceneCreator("Complete", pPrimaryStage, prevScene));
+				pPrimaryStage.setScene(Q2.errorSceneCreator("Blood donation stored in database", pPrimaryStage, prevScene));
 				pPrimaryStage.show();
 				try {
 					con = DriverManager.getConnection(url, userName, password);
 					Statement stmt= con.createStatement();
 					stmt.executeUpdate(aString);
+					stmt.close();
+					con.close();
 				} catch (SQLException e) {
 					pPrimaryStage.hide();
 					pPrimaryStage.setScene(Q2.errorSceneCreator(e.getMessage(), pPrimaryStage, prevScene));
@@ -209,14 +218,7 @@ public class BloodDonationOption {
 			}
 			
 		
-		});
-		
-		
-		
-		
-		
-		
-		
+		});		
 		Scene scene= new Scene(grid);
 		return scene;
 	}
