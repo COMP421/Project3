@@ -552,9 +552,7 @@ public class Q2 extends Application
         final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table);
- 
-        ((Group) scene.getRoot()).getChildren().addAll(vbox);
+        
         Button rootButton = new Button("Back To Main Page");
 
 		rootButton.setOnAction(new EventHandler<ActionEvent>(){
@@ -566,9 +564,9 @@ public class Q2 extends Application
 				
 			}
 		});
-		GridPane grid = new GridPane();
-        grid.add(rootButton, 25, 25);
-        ((Group) scene.getRoot()).getChildren().add(grid);
+		vbox.getChildren().addAll(label, table,rootButton);
+		 
+        ((Group) scene.getRoot()).getChildren().addAll(vbox);
 		return scene;
 	}
 	
@@ -602,9 +600,7 @@ public class Q2 extends Application
         final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, Donationtable);
  
-        ((Group) scene.getRoot()).getChildren().addAll(vbox);
         Button rootButton = new Button("Back To Main Page");
 
 		rootButton.setOnAction(new EventHandler<ActionEvent>(){
@@ -616,9 +612,9 @@ public class Q2 extends Application
 				
 			}
 		});
-		GridPane grid = new GridPane();
-        grid.add(rootButton, 25, 25);
-        ((Group) scene.getRoot()).getChildren().add(grid);
+		vbox.getChildren().addAll(label, Donationtable,rootButton);
+		 
+        ((Group) scene.getRoot()).getChildren().addAll(vbox);
 		return scene;
 	}
 	
