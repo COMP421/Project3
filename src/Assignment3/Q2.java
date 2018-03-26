@@ -307,7 +307,7 @@ public class Q2 extends Application
 			};
 		});
 */
-		Button bloodManagement = new Button("Expired Blood Management");
+		Button bloodManagement = new Button("View blood stored in blood bank");
 		GridPane bloodMgt = new GridPane();
 		root.add(bloodManagement, 0, 4);
 		final TextField bbankid = new TextField();
